@@ -2,4 +2,5 @@ pandas==2.0.3
 plotly==5.16.1
 pyfragments_xwkuang5==0.0.3
 PyGithub==1.59.1
+st_annotated_text==4.0.1
 streamlit==1.26.0
