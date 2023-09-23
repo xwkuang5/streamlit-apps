@@ -122,7 +122,7 @@ state_transition_table = [
     # state is OK and if the mode is MODE_DONE.
 
     #   white                                                    1-9
-    #sp,  |, { ,  },  [,  ],  :,  ,,  ",  \,  /,  +,  -,  .,  0,  |,
+    # sp, |,  {,  },  [,  ],  :,  ,,  ",  \,  /,  +,  -,  .,  0,  |,
     #                                               ABCDF    etc
     # a,  b,  c,  d,  e,  f,  l,  n,  r,  s,  t,  u,  |,  E,  |
     # /*start  GO*/
