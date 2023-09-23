@@ -416,8 +416,8 @@ This app checks if a given string is a valid JSON string.
 The code is based on the [JSON checker](https://www.json.org/JSON_checker/), which implements a deterministic pushdown automata (PDA) for parsing JSON.
 
 * When the string is a valid JSON string, the string is highlighted in green color
-* When the string is not a valid JSON string, the PDA state and stack are shown, 
-  and the portion of the string that disagrees with the JSON syntax is highlighted in red.
+* When the string is not a valid JSON string, the portion of the string that disagrees with the JSON syntax is highlighted in red.
+* Finally, the PDA state and stack are shown
 """)
 
 st.text("Input a string in the text box below to check if it is a valid JSON string")
