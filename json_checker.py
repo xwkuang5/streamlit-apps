@@ -377,6 +377,7 @@ def check(string):
             break
 
     if checker.done():
+        st.json(string)
         annotated_text((string, '<done>', '#008000'))
     else:
         annotated_text((string, '<valid so far>', '#008000'))
