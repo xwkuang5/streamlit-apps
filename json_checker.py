@@ -369,8 +369,8 @@ def check(string):
 
         if not is_valid:
             annotated_text(
-                (string[:idx], 'valid', '#008000'),
-                (string[idx:], 'invalid', '#FF0000')
+                (string[:idx], '<valid>', '#008000'),
+                (string[idx:], '<invalid>', '#FF0000')
             )
             st.text(f'State: {state_to_state_name[checker.state]}')
             st.text(f'Stack: {", ".join(str(mode) for mode in checker.stack)}')
