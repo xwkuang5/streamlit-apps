@@ -6,6 +6,7 @@ This app ports the C JSON checker from https://www.json.org/JSON_checker into py
 
 import streamlit as st
 from annotated_text import annotated_text
+from st_keyup import st_keyup
 from enum import Enum
 
 # TRUE = 1
@@ -224,6 +225,9 @@ class Modes(Enum):
     MODE_KEY = 3
     MODE_OBJECT = 4
 
+    def __str__(self):
+        return f'{self.name}'
+
 
 class JSONChecker:
 
@@ -365,19 +369,35 @@ def check(string):
 
         if not is_valid:
             annotated_text(
-                (string[:idx], '', '#008000'),
-                (string[idx:], '', '#FF0000')
+                (string[:idx], 'valid', '#008000'),
+                (string[idx:], 'invalid', '#FF0000')
             )
             st.text(f'State: {state_to_state_name[checker.state]}')
             st.text(f'Stack: {", ".join(str(mode) for mode in checker.stack)}')
             break
 
     if checker.done():
-        annotated_text((string, '', '#008000'))
+        annotated_text((string, '<done>', '#008000'))
+    else:
+        annotated_text((string, '<valid so far>', '#008000'))
+    st.text(f'State: {state_to_state_name[checker.state]}')
+    st.text(f'Stack: {", ".join(str(mode) for mode in checker.stack)}')
 
 
-# TODO(louiskuang): is there a way to interactively show the parse state without waiting for an explicit "ENTER" from the user
-st.text_input(
-    "Input a string to check if it is a valid JSON string", key="target_string")
+st.title("JSON Checker Visualization")
 
-check(st.session_state.target_string)
+st.markdown("""
+This app checks if a given string is a valid JSON string. 
+The code is based on the [JSON checker](https://www.json.org/JSON_checker/), which implements a deterministic pushdown automata (PDA) for parsing JSON.
+
+* When the string is a valid JSON string, the string is highlighted in green color
+* When the string is not a valid JSON string, the PDA state and stack is shown, and the portion of the string that disagrees with the JSON syntax is highlighted in red.
+""")
+
+st.divider()
+
+st.text("Input a string to check if it is a valid JSON string")
+
+target_string = st_keyup("", value='{"a":1}', label_visibility="hidden")
+
+check(target_string)
