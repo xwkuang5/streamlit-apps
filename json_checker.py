@@ -8,6 +8,7 @@ import streamlit as st
 from annotated_text import annotated_text
 from st_keyup import st_keyup
 from enum import Enum
+import pandas as pd
 
 # TRUE = 1
 # FALSE = 0
@@ -360,9 +361,21 @@ class JSONChecker:
         return self.state == OK and self.stack[-1] == Modes.MODE_DONE
 
 
+def index_column(stack):
+    if len(stack) <= 1:
+        return ["top"]
+    else:
+        index = ["" for _ in range(len(stack))]
+        index[0] = "top"
+        index[-1] = "bottom"
+        return index
+
+
 def check(string):
 
     checker = JSONChecker()
+
+    is_valid = True
 
     for idx, ch in enumerate(string):
         is_valid = checker.consume(ch)
@@ -376,13 +389,24 @@ def check(string):
             st.text(f'Stack: {", ".join(str(mode) for mode in checker.stack)}')
             break
 
-    if checker.done():
-        st.json(string)
-        annotated_text((string, '<done>', '#008000'))
-    else:
-        annotated_text((string, '<valid so far>', '#008000'))
-    st.text(f'State: {state_to_state_name[checker.state]}')
-    st.text(f'Stack: {", ".join(str(mode) for mode in checker.stack)}')
+    if is_valid:
+
+        col1, col2 = st.columns([3, 1])
+
+        with col1:
+            if checker.done():
+                annotated_text((string, '<valid>', '#008000'))
+            else:
+                annotated_text((string, '<valid so far>', '#008000'))
+
+            st.text(f'State: {state_to_state_name[checker.state]}')
+            st.dataframe(pd.DataFrame(data={
+                "stack (top to bottom)": checker.stack[::-1]
+            }, index=index_column(checker.stack)))
+
+        with col2:
+            if checker.done():
+                st.json(string)
 
 
 st.title("JSON Checker Visualization")
@@ -392,12 +416,11 @@ This app checks if a given string is a valid JSON string.
 The code is based on the [JSON checker](https://www.json.org/JSON_checker/), which implements a deterministic pushdown automata (PDA) for parsing JSON.
 
 * When the string is a valid JSON string, the string is highlighted in green color
-* When the string is not a valid JSON string, the PDA state and stack is shown, and the portion of the string that disagrees with the JSON syntax is highlighted in red.
+* When the string is not a valid JSON string, the PDA state and stack are shown, 
+  and the portion of the string that disagrees with the JSON syntax is highlighted in red.
 """)
 
-st.divider()
-
-st.text("Input a string to check if it is a valid JSON string")
+st.text("Input a string in the text box below to check if it is a valid JSON string")
 
 target_string = st_keyup("", value='{"a":1}', label_visibility="hidden")
 
