@@ -121,6 +121,10 @@ state_transition_table = [
     # negative number. A JSON text is accepted if at the end of the text the
     # state is OK and if the mode is MODE_DONE.
 
+    #   white                                                    1-9
+    #sp,  |, { ,  },  [,  ],  :,  ,,  ",  \,  /,  +,  -,  .,  0,  |,
+    #                                               ABCDF    etc
+    # a,  b,  c,  d,  e,  f,  l,  n,  r,  s,  t,  u,  |,  E,  |
     # /*start  GO*/
     [GO, GO, -6, __, -5, __, __, __, __, __, __, __, __, __, __, __,
      __, __, __, __, __, __, __, __, __, __, __, __, __, __, __],
